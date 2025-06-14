@@ -1,0 +1,48 @@
+name: Build and Push to ECR (All Branches)
+
+on:
+  push:
+    branches:
+      - '**'  # trigger on push to any branch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      ENV_FILE: .env
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Load environment variables from .env
+        run: |
+          set -a
+          source $ENV_FILE
+          set +a
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/<YOUR-GITHUB-OIDC-ROLE>
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image
+        run: |
+          docker build -t $ECR_REPO_NAME:latest .
+
+      - name: Tag Docker image
+        run: |
+          docker tag $ECR_REPO_NAME:latest $ECR_URI:latest
+
+      - name: Push to Amazon ECR
+        run: |
+          docker push $ECR_URI:latest
