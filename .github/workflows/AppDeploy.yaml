@@ -34,11 +34,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t $ECR_REPO_NAME:latest ./app
+          docker build -t $ECR_REPO_NAME:latest .
 
       - name: Tag Docker image
         run: |
-            docker build -t $ECR_REPO_NAME:latest ./app
+            docker build -t $ECR_REPO_NAME:latest .
 
       - name: Push to Amazon ECR
         run: |
