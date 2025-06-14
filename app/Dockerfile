@@ -2,20 +2,22 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Install git (required for some dependencies)
 RUN apk add --no-cache git
 
-# Copy package files first for better caching
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies
+# Install deps
 RUN npm install
 
-# Copy the rest of the application
-COPY . ./
+# Copy source
+COPY . .
 
-# Expose port
+# Build the TypeScript app
+RUN npm run build  # make sure this script exists in package.json
+
+# Expose the app port
 EXPOSE 3000
 
-# Start the application directly with ts-node
-CMD ["npx", "ts-node", "src/app.ts"]
+# Run the built JS file
+CMD ["node", "dist/app.js"]  # adjust if your output is in a different file
