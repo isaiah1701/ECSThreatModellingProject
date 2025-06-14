@@ -10,34 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      id-token: write
       contents: read
 
     env:
-      ENV_FILE: .env
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      ECR_REPO_NAME: ${{ secrets.ECR_REPO_NAME }}
+      ECR_URI: ${{ secrets.ECR_URI }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Load environment variables from .env
-        run: |
-          set -a
-          source $ENV_FILE
-          set +a
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/<YOUR-GITHUB-OIDC-ROLE>
-          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build Docker image
         run: |
-          docker build -t $ECR_REPO_NAME:latest .
+          docker build -t $ECR_REPO_NAME:latest ./app
 
       - name: Tag Docker image
         run: |
