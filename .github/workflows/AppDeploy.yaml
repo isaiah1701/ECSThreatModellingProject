@@ -32,13 +32,10 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Docker image
+      - name: Build and tag Docker image
         run: |
           docker build -t $ECR_REPO_NAME:latest ./app
-
-      - name: Tag Docker image
-        run: |
-            docker build -t $ECR_REPO_NAME:latest ./app
+          docker tag $ECR_REPO_NAME:latest $ECR_URI:latest
 
       - name: Push to Amazon ECR
         run: |
