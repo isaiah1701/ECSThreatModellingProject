@@ -30,70 +30,54 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Debug - List files
-        run: |
-          echo "=== Root directory ==="
-          ls -la
-          echo "=== App directory ==="
-          ls -la app/
-          echo "=== Dockerfile check ==="
-          ls -la app/Dockerfile || echo "Dockerfile not found in app/"
-          echo "=== package.json check ==="
-          ls -la app/package.json || echo "package.json not found in app/"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-      - name: Create Dockerfile if missing
+      - name: Create React app in app directory
         run: |
-          if [ ! -f app/Dockerfile ]; then
-            echo "Creating Dockerfile..."
-            cat > app/Dockerfile << 'EOF'
+          # Remove empty app directory
+          rm -rf app
+          
+          # Create new React app
+          npx create-react-app app --template typescript
+          
+          # Verify the app was created
+          ls -la app/
+          
+      - name: Create Dockerfile in app directory
+        run: |
+          cat > app/Dockerfile << 'EOF'
           FROM node:18-alpine
           
           WORKDIR /app
           
-          # Copy everything from current directory (app)
-          COPY . .
+          # Copy package files first for better caching
+          COPY package*.json ./
+          COPY yarn.lock ./
           
           # Install dependencies
           RUN yarn install --frozen-lockfile
           
+          # Copy the rest of the application
+          COPY . .
+          
           # Build the application
           RUN yarn build
+          
+          # Install serve globally
           RUN yarn global add serve
           
           EXPOSE 3000
           CMD ["serve", "-s", "build"]
           EOF
-          fi
 
-      - name: Build Docker image (Method 1 - CD into app)
+      - name: Build Docker image
         run: |
           cd app
-          docker build -t temp-image:latest .
-        continue-on-error: true
-        id: build1
-
-      - name: Build Docker image (Method 2 - Explicit paths)
-        if: steps.build1.outcome == 'failure'
-        run: |
-          docker build -t temp-image:latest -f app/Dockerfile app/
-        continue-on-error: true
-        id: build2
-
-      - name: Build Docker image (Method 3 - From root with app context)
-        if: steps.build1.outcome == 'failure' && steps.build2.outcome == 'failure'
-        run: |
-          docker build -t temp-image:latest --file app/Dockerfile --context app/ .
-        continue-on-error: true
-        id: build3
-
-      - name: Build Docker image (Method 4 - Copy everything to root)
-        if: steps.build1.outcome == 'failure' && steps.build2.outcome == 'failure' && steps.build3.outcome == 'failure'
-        run: |
-          cp -r app/* .
-          cp app/Dockerfile .
           docker build -t temp-image:latest .
 
       - name: Tag image for ECR
