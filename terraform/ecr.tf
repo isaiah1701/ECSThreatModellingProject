@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "threat_model_app" {
-  name = "aws-threat-model-app"
+  name         = "aws-threat-model-app"
+  force_delete = true
 
   tags = {
     Name  = "aws-threat-model-app"
