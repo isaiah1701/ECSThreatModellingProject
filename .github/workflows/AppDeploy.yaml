@@ -57,19 +57,18 @@ jobs:
           
           # Copy package files first for better caching
           COPY package*.json ./
-          COPY yarn.lock ./
           
-          # Install dependencies
-          RUN yarn install --frozen-lockfile
+          # Install dependencies using npm (since create-react-app uses npm)
+          RUN npm ci --only=production
           
           # Copy the rest of the application
           COPY . .
           
           # Build the application
-          RUN yarn build
+          RUN npm run build
           
           # Install serve globally
-          RUN yarn global add serve
+          RUN npm install -g serve
           
           EXPOSE 3000
           CMD ["serve", "-s", "build"]
