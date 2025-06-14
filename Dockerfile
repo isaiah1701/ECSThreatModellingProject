@@ -2,12 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files first (correct paths)
-COPY app/package.json ./
-COPY app/yarn.lock ./
+# Copy package files first for better caching
+COPY app/package.json app/yarn.lock ./
 
 # Install dependencies
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 # Copy the rest of the application
 COPY app/ ./
