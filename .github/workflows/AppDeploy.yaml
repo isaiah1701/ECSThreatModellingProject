@@ -33,6 +33,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPO_NAME }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
+          cd amazon-threat-composer
           echo "Building with registry: $ECR_REGISTRY"
           echo "Repository: $ECR_REPOSITORY"
           echo "Image tag: $IMAGE_TAG"
