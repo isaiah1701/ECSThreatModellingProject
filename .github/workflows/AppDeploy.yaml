@@ -33,8 +33,9 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build Docker image
-        run: |
-          docker build -t $ECR_REPO_NAME:latest -f ./app/Dockerfile ./app
+              run:|
+                  docker build -t $ECR_REPO_NAME:latest ./app
+
 
       - name: Tag Docker image
         run: |
