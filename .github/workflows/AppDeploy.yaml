@@ -3,7 +3,7 @@ name: Build and Push to ECR (All Branches)
 on:
   push:
     branches:
-      - '**'  # trigger on push to any branch
+      - '**'  # Trigger on push to any branch
 
 jobs:
   build-and-push:
@@ -33,9 +33,8 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build Docker image
-              run:|
-                  docker build -t $ECR_REPO_NAME:latest ./app
-
+        run: |
+          docker build -t $ECR_REPO_NAME:latest ./app
 
       - name: Tag Docker image
         run: |
