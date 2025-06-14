@@ -48,19 +48,22 @@ jobs:
           # Verify the app was cloned
           ls -la app/
           
-      - name: Create Dockerfile in root directory
+      - name: Create optimized Dockerfile
         run: |
           cat > Dockerfile << 'EOF'
           FROM node:18-alpine
           
           WORKDIR /app
           
+          # Install git (required for some dependencies)
+          RUN apk add --no-cache git
+          
           # Copy package files first for better caching
           COPY app/package*.json ./
           COPY app/yarn.lock ./
           
-          # Install dependencies
-          RUN yarn install --frozen-lockfile
+          # Install dependencies without running postinstall scripts
+          RUN yarn install --frozen-lockfile --ignore-scripts
           
           # Copy the rest of the application
           COPY app/ ./
