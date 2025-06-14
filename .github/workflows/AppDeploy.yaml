@@ -38,7 +38,7 @@ jobs:
 
       - name: Tag Docker image
         run: |
-          docker tag $ECR_REPO_NAME:latest $ECR_URI:latest
+            docker build -t $ECR_REPO_NAME:latest -f app/Dockerfile app
 
       - name: Push to Amazon ECR
         run: |
