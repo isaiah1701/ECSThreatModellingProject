@@ -1,4 +1,4 @@
-name: Build and Push to ECR (All Branches)
+name: Build and Push AWS Threat Composer to ECR
 
 on:
   push:
@@ -37,15 +37,15 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Create React app in app directory
+      - name: Clone AWS Threat Composer
         run: |
           # Remove empty app directory
           rm -rf app
           
-          # Create new React app
-          npx create-react-app app --template typescript
+          # Clone the AWS Threat Composer repository
+          git clone https://github.com/awslabs/threat-composer.git app
           
-          # Verify the app was created
+          # Verify the app was cloned
           ls -la app/
           
       - name: Create Dockerfile in root directory
@@ -57,18 +57,19 @@ jobs:
           
           # Copy package files first for better caching
           COPY app/package*.json ./
+          COPY app/yarn.lock ./
           
-          # Install dependencies using npm (since create-react-app uses npm)
-          RUN npm ci --only=production
+          # Install dependencies
+          RUN yarn install --frozen-lockfile
           
-          # Copy the rest of the application from app directory
+          # Copy the rest of the application
           COPY app/ ./
           
           # Build the application
-          RUN npm run build
+          RUN yarn build
           
           # Install serve globally
-          RUN npm install -g serve
+          RUN yarn global add serve
           
           EXPOSE 3000
           CMD ["serve", "-s", "build"]
@@ -90,5 +91,5 @@ jobs:
 
       - name: Output ECR image URI
         run: |
-          echo "Image pushed to: ${{ env.ECR_URI }}:latest"
-          echo "Image pushed to: ${{ env.ECR_URI }}:${{ github.sha }}"
+          echo "AWS Threat Composer image pushed to: ${{ env.ECR_URI }}:latest"
+          echo "AWS Threat Composer image pushed to: ${{ env.ECR_URI }}:${{ github.sha }}"
