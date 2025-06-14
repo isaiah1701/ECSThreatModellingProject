@@ -1,4 +1,4 @@
-name: Build and Push AWS Threat Composer to ECR
+name: Build and Push Amazon Threat Composer to ECR
 
 on:
   push:
@@ -32,60 +32,6 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Clone AWS Threat Composer
-        run: |
-          # Remove empty app directory
-          rm -rf app
-          
-          # Clone the AWS Threat Composer repository
-          git clone https://github.com/awslabs/threat-composer.git app
-          
-          # Verify the app was cloned
-          ls -la app/
-          
-      - name: Create optimized Dockerfile for AWS Threat Composer
-        run: |
-          cat > Dockerfile << 'EOF'
-          FROM node:18-alpine as builder
-          
-          WORKDIR /app
-          
-          # Install git and python (required for some dependencies)
-          RUN apk add --no-cache git python3 make g++
-          
-          # Copy package files first for better caching
-          COPY app/package*.json ./
-          COPY app/yarn.lock ./
-          
-          # Install all dependencies (including dev dependencies for build)
-          RUN yarn install --frozen-lockfile
-          
-          # Copy the rest of the application
-          COPY app/ ./
-          
-          # Build only the main app package (skip problematic packages)
-          RUN cd packages/threat-composer-app && yarn build
-          
-          # Production stage
-          FROM node:18-alpine
-          
-          WORKDIR /app
-          
-          # Install serve globally
-          RUN yarn global add serve
-          
-          # Copy built application from builder stage
-          COPY --from=builder /app/packages/threat-composer-app/build ./build
-          
-          EXPOSE 3000
-          CMD ["serve", "-s", "build"]
-          EOF
-
       - name: Build Docker image
         run: |
           docker build -t temp-image:latest .
@@ -102,5 +48,5 @@ jobs:
 
       - name: Output ECR image URI
         run: |
-          echo "AWS Threat Composer image pushed to: ${{ env.ECR_URI }}:latest"
-          echo "AWS Threat Composer image pushed to: ${{ env.ECR_URI }}:${{ github.sha }}"
+          echo "Amazon Threat Composer image pushed to: ${{ env.ECR_URI }}:latest"
+          echo "Amazon Threat Composer image pushed to: ${{ env.ECR_URI }}:${{ github.sha }}"

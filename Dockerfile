@@ -6,20 +6,19 @@ WORKDIR /app
 RUN apk add --no-cache git
 
 # Copy package files first for better caching
-COPY app/package*.json ./
-COPY app/yarn.lock ./
+COPY amazon-threat-composer-app/package*.json ./
 
-# Install dependencies without running postinstall scripts
-RUN yarn install --frozen-lockfile --ignore-scripts
+# Install dependencies
+RUN npm install
 
 # Copy the rest of the application
-COPY app/ ./
+COPY amazon-threat-composer-app/ ./
 
-# Build the application
-RUN yarn build
+# Build the TypeScript application
+RUN npm run build
 
-# Install serve globally
-RUN yarn global add serve
-
+# Expose port
 EXPOSE 3000
-CMD ["serve", "-s", "build"]
+
+# Start the application
+CMD ["npm", "start"]
