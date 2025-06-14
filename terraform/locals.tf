@@ -1,13 +1,11 @@
 locals {
-
-  name   = "ecs-project"
-  domain = "tm.isaiahmichael.com"
-  region = "eu-west-2"
-
+  name         = "ecs-project"
+  region       = "eu-west-2"
+  ecr_repo_name = "aws-threat-model-app"  # Changed from "threat-composer-app" to match your actual ECR repo
 
   tags = {
-    project       = "ecs project"
-    "Environment" = "sandbox"
-    "Owner"       = "Isaiah Michael"
+    Environment = "sandbox"
+    Owner       = "Isaiah Michael"
+    Project     = "ecs project"
   }
 }

@@ -2,7 +2,7 @@ resource "aws_lb" "app" {
   name               = "ecs-project-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_sg.id]
+  security_groups    = [module.alb_sg.security_group_id]  # Use ALB security group
   subnets            = module.vpc.public_subnets
 
   tags = {
@@ -39,13 +39,30 @@ resource "aws_lb_target_group" "app_tg" {
 
 resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.app.arn
-  port              = 443
+  port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = "arn:aws:acm:eu-west-2:282378667097:certificate/f19e06eb-3d24-4013-9408-b4b3a8be91a4"
+  certificate_arn   = "arn:aws:acm:eu-west-2:282378667097:certificate/9b829ffc-7f88-4489-b990-4703c693f6f4"
 
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.app_tg.arn
+  }
+}
+
+# Add HTTP listener to redirect to HTTPS
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.app.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
