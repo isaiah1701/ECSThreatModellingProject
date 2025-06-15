@@ -16,6 +16,8 @@ A production-ready threat modeling web application deployed on AWS using modern 
 
 ---
 
+Note : Links have now been taken down 
+
 ## 📷 **Screenshots - Proof of Deployment**
 
 ### 🌐 Live Application
