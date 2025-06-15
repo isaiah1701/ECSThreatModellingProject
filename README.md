@@ -68,13 +68,13 @@ npm start
 # App runs on http://localhost:3000
 ```
 
-## 📊 Monitoring
+## 📊 Basic Monitoring
 
 ```bash
 # Check ECS status
 aws ecs describe-services --cluster ecs-project-cluster --services ecs-project-service --region eu-west-2
 
-# View logs
+# View basic container logs (auto-created by ECS)
 aws logs tail /ecs/ecs-project --follow --region eu-west-2
 
 # Check target health
@@ -94,7 +94,7 @@ terraform destroy
 - **ALB**: Load balancing + SSL termination  
 - **VPC**: Isolated networking
 - **ECR**: Container registry
-- **CloudWatch**: Logging & monitoring
+- **CloudWatch Logs**: Basic container logging (auto-configured)
 - **ACM**: SSL certificates
 
 ---
