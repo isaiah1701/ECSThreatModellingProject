@@ -19,22 +19,22 @@ A production-ready threat modeling web application deployed on AWS using modern 
 ## 📷 **Screenshots - Proof of Deployment**
 
 ### 🌐 Live Application
-![Main Application](visuals/healthEndpointECS.png)
+![Main Application](visuals/HomeEndpointECS.png)
 *Threat Model Composer running live at tm.isaiahmichael.com*
 
 ### 🩺 Health Check Endpoint
-![Health Check](https://raw.githubusercontent.com/isaiah1701/ECSThreatProject/main/visuals/health-endpoint.png)
+![Health Check](visuals/healthEndpointECS.png)
 *Health monitoring endpoint returning JSON status*
 
 ### 📊 API Response
-![API Endpoint](https://raw.githubusercontent.com/isaiah1701/ECSThreatProject/main/visuals/api-endpoint.png)
+![API Endpoint](visuals/APIEndpointECS.png)
 *RESTful API endpoint with available routes*
 
 ---
 
 ## 🗺️ **Architecture Diagram**
 
-![Architecture Diagram](htte.pngps://raw.githubusercontent.com/isaiah1701/ECSThreatProject/main/visuals/architecture-diagram.png)
+![Architecture Diagram](visuals/HomeEndpointECS.png)
 
 **Architecture Flow:**
 1. **Cloudflare DNS** → Routes `tm.isaiahmichael.com` to AWS ALB
