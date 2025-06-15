@@ -1,3 +1,4 @@
 terraform.tfvars.env
 .terraform/
-terraform/terraform.tfvars
+terraform/terraform.tfvarsterraform/terraform.tfvars
+*.tfvars
