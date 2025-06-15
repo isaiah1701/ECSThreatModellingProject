@@ -19,22 +19,22 @@ A production-ready threat modeling web application deployed on AWS using modern 
 ## 📷 **Screenshots - Proof of Deployment**
 
 ### 🌐 Live Application
-![Main Application](visuals/home-page.png)
+![Main Application](https://raw.githubusercontent.com/isaiah1701/ECSThreatProject/main/visuals/home-page.png)
 *Threat Model Composer running live at tm.isaiahmichael.com*
 
-### 🩺 Health Check Endpoint  
-![Health Check](visuals/health-endpoint.png)
+### 🩺 Health Check Endpoint
+![Health Check](https://raw.githubusercontent.com/isaiah1701/ECSThreatProject/main/visuals/health-endpoint.png)
 *Health monitoring endpoint returning JSON status*
 
 ### 📊 API Response
-![API Endpoint](visuals/api-endpoint.png)
+![API Endpoint](https://raw.githubusercontent.com/isaiah1701/ECSThreatProject/main/visuals/api-endpoint.png)
 *RESTful API endpoint with available routes*
 
 ---
 
 ## 🗺️ **Architecture Diagram**
 
-![Architecture Diagram](visuals/architecture-diagram.png)
+![Architecture Diagram](https://raw.githubusercontent.com/isaiah1701/ECSThreatProject/main/visuals/architecture-diagram.png)
 
 **Architecture Flow:**
 1. **Cloudflare DNS** → Routes `tm.isaiahmichael.com` to AWS ALB
@@ -71,7 +71,7 @@ A production-ready threat modeling web application deployed on AWS using modern 
 - **Networking**: VPC with public subnets across 3 AZs
 - **Security**: Security Groups + IAM roles
 - **SSL/TLS**: AWS Certificate Manager (ACM)
-
+- **Logging**: CloudWatch Logs (auto-configured)
 
 ### **DevOps & Automation**
 - **IaC**: Terraform v1.8+
@@ -132,7 +132,7 @@ The GitHub Actions workflow automatically:
 
 ### **1️⃣ Clone & Setup**
 ```bash
-git clone https://github.com/yourusername/ECSThreatProject.git
+git clone https://github.com/isaiah1701/ECSThreatProject.git
 cd ECSThreatProject
 ```
 
@@ -314,4 +314,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **🚀 Built with modern AWS architecture, Terraform automation, and DevOps best practices**
 
-*This project demonstrates production-ready cloud deployment skills valuable for DevOps, Cloud Engineering, and Full Stack Development roles.*
+*This project demonstrates production-ready cloud deployment skills valuable for DevOps, Cloud Engineering, and Full-Stack development roles.*
