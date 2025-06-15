@@ -76,5 +76,26 @@ resource "aws_ecs_service" "app" {
   tags = local.tags
 }
 
+resource "aws_iam_role_policy" "ecs_ecr_policy" {
+  name = "${local.name}-ecs-ecr-policy"
+  role = aws_iam_role.ecs_task_exec.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:GetAuthorizationToken"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Remove this duplicate security group since you have it as a module in sg.tf
 # resource "aws_security_group" "ecs_task_sg" { ... }

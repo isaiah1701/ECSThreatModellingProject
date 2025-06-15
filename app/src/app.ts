@@ -1,56 +1,38 @@
-import { ThreatModel } from './components/ThreatModel';
-import { ThreatCanvas } from './components/ThreatCanvas';
-import { ComponentLibrary } from './components/ComponentLibrary';
-import { ThreatService } from './services/ThreatService';
-import { ExportService } from './services/ExportService';
+import express from 'express';
 
-class App {
-    private threatModel: ThreatModel;
-    private threatCanvas: ThreatCanvas;
-    private componentLibrary: ComponentLibrary;
-    private threatService: ThreatService;
-    private exportService: ExportService;
+const app = express();
+const PORT = 3000;
 
-    constructor() {
-        this.threatModel = new ThreatModel();
-        this.threatCanvas = new ThreatCanvas();
-        this.componentLibrary = new ComponentLibrary();
-        this.threatService = new ThreatService();
-        this.exportService = new ExportService();
-    }
+app.use(express.json());
 
-    public initialize(): void {
-        this.setupUI();
-        this.loadThreats();
-    }
+app.get('/', (req, res) => {
+  res.send(`
+    <html>
+      <head><title>Threat Model App</title></head>
+      <body>
+        <h1>🛡️ Threat Model Composer</h1>
+        <p>Simple threat modeling application</p>
+        <p>Status: <strong>Running</strong></p>
+        <p>Time: ${new Date().toISOString()}</p>
+        <a href="/health">Health Check</a> | 
+        <a href="/api">API</a>
+      </body>
+    </html>
+  `);
+});
 
-    private setupUI(): void {
-        // Initialize UI components
-        this.componentLibrary.createButton('Add Threat', this.addThreat.bind(this));
-        this.componentLibrary.createButton('Export Model', this.exportModel.bind(this));
-        // Additional UI setup can be done here
-    }
+app.get('/health', (req, res) => {
+  res.json({ status: 'healthy', time: new Date().toISOString() });
+});
 
-    private loadThreats(): void {
-        // Load existing threats and update the canvas
-        const threats = this.threatService.fetchThreats();
-        this.threatModel.addThreats(threats);
-        this.threatCanvas.render(this.threatModel);
-    }
+app.get('/api', (req, res) => {
+  res.json({ 
+    message: 'Threat Model API',
+    endpoints: ['/health', '/api'],
+    version: '1.0.0'
+  });
+});
 
-    private addThreat(): void {
-        // Logic to add a new threat
-        const newThreat = this.threatService.createThreat();
-        this.threatModel.addThreat(newThreat);
-        this.threatCanvas.update(this.threatModel);
-    }
-
-    private exportModel(): void {
-        // Logic to export the threat model
-        const exportedData = this.exportService.exportToJSON(this.threatModel);
-        console.log('Exported Data:', exportedData);
-    }
-}
-
-const app = new App();
-app.initialize();
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+});
