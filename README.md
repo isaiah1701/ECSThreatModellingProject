@@ -19,7 +19,7 @@ A production-ready threat modeling web application deployed on AWS using modern 
 ## 📷 **Screenshots - Proof of Deployment**
 
 ### 🌐 Live Application
-![Main Application](https://raw.githubusercontent.com/isaiah1701/ECSThreatProject/main/visuals/healthEndpointECS.png)
+![Main Application](visuals/healthEndpointECS.png)
 *Threat Model Composer running live at tm.isaiahmichael.com*
 
 ### 🩺 Health Check Endpoint
