@@ -34,7 +34,7 @@ A production-ready threat modeling web application deployed on AWS using modern 
 
 ## 🗺️ **Architecture Diagram**
 
-![Architecture Diagram](visuals/HomeEndpointECS.png)
+![Architecture Diagram](visuals/ECSArchitecture.png)
 
 **Architecture Flow:**
 1. **Cloudflare DNS** → Routes `tm.isaiahmichael.com` to AWS ALB
