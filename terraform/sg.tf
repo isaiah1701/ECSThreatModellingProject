@@ -1,3 +1,4 @@
+# Web Server Security Group - Public-facing load balancer access
 module "web_server_sg" {
   source  = "terraform-aws-modules/security-group/aws"
 
@@ -5,23 +6,25 @@ module "web_server_sg" {
   description = "Security group for web server"
   vpc_id      = module.vpc.vpc_id
 
+  # Allow HTTP and HTTPS from anywhere (public internet)
   ingress_with_cidr_blocks = [
     {
       from_port   = 80
       to_port     = 80
       protocol    = "tcp"
-      cidr_blocks = "0.0.0.0/0"  # Changed from ["0.0.0.0/0"] to "0.0.0.0/0"
+      cidr_blocks = "0.0.0.0/0"
       description = "HTTP"
     },
     {
       from_port   = 443
       to_port     = 443
       protocol    = "tcp"
-      cidr_blocks = "0.0.0.0/0"  # Changed from ["0.0.0.0/0"] to "0.0.0.0/0"
+      cidr_blocks = "0.0.0.0/0"
       description = "HTTPS"
     }
   ]
 
+  # Allow all outbound traffic
   egress_with_cidr_blocks = [
     {
       from_port   = 0
@@ -35,7 +38,7 @@ module "web_server_sg" {
   tags = local.tags
 }
 
-# ALB Security Group
+# ALB Security Group - Application Load Balancer traffic rules
 module "alb_sg" {
   source  = "terraform-aws-modules/security-group/aws"
 
@@ -43,6 +46,7 @@ module "alb_sg" {
   description = "Security group for ALB"
   vpc_id      = module.vpc.vpc_id
 
+  # Accept HTTP/HTTPS from public internet
   ingress_with_cidr_blocks = [
     {
       from_port   = 80
@@ -60,6 +64,7 @@ module "alb_sg" {
     }
   ]
 
+  # ALB needs outbound access to reach ECS targets
   egress_with_cidr_blocks = [
     {
       from_port   = 0
@@ -73,7 +78,7 @@ module "alb_sg" {
   tags = local.tags
 }
 
-# ECS Security Group
+# ECS Security Group - Container-level security (most restrictive)
 module "ecs_sg" {
   source  = "terraform-aws-modules/security-group/aws"
 
@@ -81,6 +86,8 @@ module "ecs_sg" {
   description = "Security group for ECS tasks"
   vpc_id      = module.vpc.vpc_id
 
+  # Only allow traffic from ALB on application port 3000
+  # This implements defense in depth - containers only accept ALB traffic
   ingress_with_source_security_group_id = [
     {
       from_port                = 3000
@@ -91,6 +98,7 @@ module "ecs_sg" {
     }
   ]
 
+  # ECS needs outbound for ECR image pulls and internet access
   egress_with_cidr_blocks = [
     {
       from_port   = 0

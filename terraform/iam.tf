@@ -1,7 +1,8 @@
-# ECS Task Execution Role
+# ECS Task Execution Role - Required for ECS to pull images and send logs
 resource "aws_iam_role" "ecs_task_exec" {
   name = "${local.name}-ecs-task-exec-role"
 
+  # Trust policy - allows ECS service to assume this role
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -18,13 +19,13 @@ resource "aws_iam_role" "ecs_task_exec" {
   tags = local.tags
 }
 
-# Attach the ECS Task Execution Role Policy
+# AWS managed policy for ECS task execution (ECR pulls, CloudWatch logs)
 resource "aws_iam_role_policy_attachment" "ecs_exec_attach" {
   role       = aws_iam_role.ecs_task_exec.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# ECS Task Role (for application permissions)
+# ECS Task Role - Runtime permissions for the application itself
 resource "aws_iam_role" "ecs_task_role" {
   name = "${local.name}-ecs-task-role"
 
@@ -44,11 +45,12 @@ resource "aws_iam_role" "ecs_task_role" {
   tags = local.tags
 }
 
-# Add any additional policies your application needs
+# Custom policy for application-specific AWS service access
 resource "aws_iam_role_policy" "ecs_task_policy" {
   name = "${local.name}-ecs-task-policy"
   role = aws_iam_role.ecs_task_role.id
 
+  # Minimal permissions for CloudWatch logging
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

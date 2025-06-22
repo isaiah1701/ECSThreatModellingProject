@@ -32,3 +32,4 @@ output "alb_security_group_id" {
   description = "ALB Security Group ID"
   value       = module.alb_sg.security_group_id
 }
+##outputted variables for the ECS cluster and task definition

@@ -20,4 +20,4 @@ provider "aws" {
 
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
-}
+} ## installs the AWS and Cloudflare providers for Terraform
