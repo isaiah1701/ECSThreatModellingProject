@@ -2,7 +2,7 @@
 
 ![Terraform](https://img.shields.io/badge/Terraform-v1.8+-purple) ![AWS ECS](https://img.shields.io/badge/AWS-ECS_Fargate-orange) ![Docker](https://img.shields.io/badge/Docker-Containerized-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-Express.js-green)
 
-A production-ready threat modeling web application deployed on AWS using modern DevOps practices. This project demonstrates complete infrastructure automation, containerized deployment, and secure cloud architecture.
+A production-ready threat modeling web application deployed on AWS using modern DevOps practices. This project demonstrates complete infrastructure automation, containerized deployment, and secure cloud architecture. This project aims to deliver an MVP to demonstrate building an application and managing it via ECS + Fargate
 
 ---
 
