@@ -15,8 +15,7 @@ A production-ready threat modeling web application deployed on AWS using modern 
 | **API** | https://tm.isaiahmichael.com/api |  No Longer Live |
 
 ---
-
-Note : Links have now been taken down 
+Note: App is no longer live to avoid unnecessary AWS billing. Screenshots demonstrate full deployment
 
 ## 📷 **Screenshots - Proof of Deployment**
 
