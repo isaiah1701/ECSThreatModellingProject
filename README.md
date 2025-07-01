@@ -10,9 +10,9 @@ A production-ready threat modeling web application deployed on AWS using modern 
 
 | Endpoint | URL | Status |
 |----------|-----|---------|
-| **Main App** | https://tm.isaiahmichael.com | ✅ Live |
-| **Health Check** | https://tm.isaiahmichael.com/health | ✅ Monitored |
-| **API** | https://tm.isaiahmichael.com/api | ✅ Active |
+| **Main App** | https://tm.isaiahmichael.com | No Longer Live |
+| **Health Check** | https://tm.isaiahmichael.com/health |  No Longer Live |
+| **API** | https://tm.isaiahmichael.com/api |  No Longer Live |
 
 ---
 
